@@ -74,7 +74,7 @@ const Dashboard = () => {
     <div>
       {userRole === 'admin' && <AdminDashboard />}
       {userRole === 'student' && <StudentDashboard />}
-      {userRole === 'dean_of_school' && <DeanDashboard />}
+      {userRole === 'dean' && <DeanDashboard />}
       {userRole === 'hod' && <HodDashboard />}
       {userRole === 'staff' && <HodDashboard />}
       {userRole === 'director_of_languages' && <HodDashboard />}
