@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import StudentDashboard from '../components/StudentDash';
-import AdminDashboard from '../components/adminDas';
-import { jwtDecode } from 'jwt-decode'; // Make sure it's installed: npm install jwt-decode
-import DeanDashboard from '../components/DeanDash';
-import HodDashboard from '../components/HodDash';
+import { useState, useEffect } from "react";
+import StudentDashboard from "../components/StudentDash";
+import AdminDashboard from "../components/adminDas";
+import { jwtDecode } from "jwt-decode"; // Make sure it's installed: npm install jwt-decode
+import DeanDashboard from "../components/DeanDash";
+import HodDashboard from "../components/HodDash";
 
 const Dashboard = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -13,10 +13,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchUserData = () => {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem("authToken");
 
       if (!token) {
-        setError('No auth token found. Please login again.');
+        setError("No auth token found. Please login again.");
         setLoading(false);
         return;
       }
@@ -32,8 +32,8 @@ const Dashboard = () => {
           setError("User role not found in token.");
         }
       } catch (decodeError) {
-        console.error('Failed to decode token:', decodeError);
-        setError('Invalid token. Please log in again.');
+        console.error("Failed to decode token:", decodeError);
+        setError("Invalid token. Please log in again.");
       } finally {
         setLoading(false);
       }
@@ -58,8 +58,8 @@ const Dashboard = () => {
           <p>{error}</p>
           <button
             onClick={() => {
-              localStorage.removeItem('authToken');
-              window.location.href = '/login';
+              localStorage.removeItem("authToken");
+              window.location.href = "/login";
             }}
             className="mt-2 bg-red-600 text-white px-4 py-2 rounded"
           >
@@ -72,28 +72,40 @@ const Dashboard = () => {
 
   return (
     <div>
-      {userRole === 'admin' && <AdminDashboard />}
-      {userRole === 'student' && <StudentDashboard />}
-      {userRole === 'dean_of_school' && <DeanDashboard />}
-      {userRole === 'hod' && <HodDashboard />}
-      {userRole === 'staff' && <HodDashboard />}
-      {userRole === 'director_of_languages' && <HodDashboard />}
-      {userRole === 'librarian' && <HodDashboard />}
-      {userRole === 'Librarian' && <HodDashboard />}
-      {userRole === 'finance' && <HodDashboard />}
-      {userRole === 'registrationOfficer' && <HodDashboard />}
-      {userRole === 'recoveryOfficer' && <HodDashboard />}
-      {userRole === 'chancellor' && <HodDashboard />}
+      {userRole === "admin" && <AdminDashboard />}
+      {userRole === "student" && <StudentDashboard />}
+      {userRole === "dean_of_school" && <DeanDashboard />}
+      {userRole === "hod" && <HodDashboard />}
+      {userRole === "staff" && <HodDashboard />}
+      {userRole === "director_of_languages" && <HodDashboard />}
+      {userRole === "librarian" && <HodDashboard />}
+      {userRole === "Librarian" && <HodDashboard />}
+      {userRole === "finance" && <HodDashboard />}
+      {userRole === "registrationOfficer" && <HodDashboard />}
+      {userRole === "recoveryOfficer" && <HodDashboard />}
+      {userRole === "chancellor" && <HodDashboard />}
 
-      {userRole && userRole !== 'admin' && userRole !== 'student' && userRole !== 'dean' && userRole !== 'staff' && userRole !== 'director_of_languages' && userRole !== 'librarian' && userRole !== 'finance' && userRole !== 'registrationOfficer' && userRole !== 'recoveryOfficer' && userRole !== 'chancellor' && (
-        <div className="flex justify-center items-center h-screen">
-          <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
-            <p className="font-bold">Unknown Role</p>
-            <p>Your role ({userRole}) doesn't have an associated dashboard.</p>
-            <p>Please contact the administrator for assistance.</p>
+      {userRole &&
+        userRole !== "admin" &&
+        userRole !== "student" &&
+        userRole !== "dean" &&
+        userRole !== "staff" &&
+        userRole !== "director_of_languages" &&
+        userRole !== "librarian" &&
+        userRole !== "finance" &&
+        userRole !== "registrationOfficer" &&
+        userRole !== "recoveryOfficer" &&
+        userRole !== "chancellor" && (
+          <div className="flex justify-center items-center h-screen">
+            <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+              <p className="font-bold">Unknown Role</p>
+              <p>
+                Your role ({userRole}) doesn't have an associated dashboard.
+              </p>
+              <p>Please contact the administrator for assistance.</p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };
