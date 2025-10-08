@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import Logout from '../logout';
-import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
-import RequestForm from './SchoolForm';
-import TranscriptRequestForm from './SchoolForm';
-import Modal from './model';
-import Profile from '../adminDas/profile'; import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import Logout from "../logout";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import RequestForm from "./SchoolForm";
+import TranscriptRequestForm from "./SchoolForm";
+import Modal from "./model";
+import Profile from "../adminDas/profile";
+import { useNavigate } from "react-router-dom";
 import {
-
   LayoutDashboard,
   FileText,
   Archive,
@@ -27,15 +27,15 @@ import {
   XCircle,
   AlertCircle,
   ChevronDown,
-  User
-} from 'lucide-react';
-import StudentForms from './forms';
+  User,
+} from "lucide-react";
+import StudentForms from "./forms";
 
 const DocumentsPage = () => {
   const [isModalVisible3, setIsModalVisible3] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("all");
   interface TranscriptRequest {
     id: string;
     regnumber?: string;
@@ -51,7 +51,7 @@ const DocumentsPage = () => {
   useEffect(() => {
     const fetchTranscriptRequests = async () => {
       try {
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem("authToken");
         if (!token) return;
 
         interface MyJwtPayload {
@@ -62,7 +62,8 @@ const DocumentsPage = () => {
         const userId = decoded?.id;
         if (!userId) return;
 
-        const response: any = await axios.get(`http://localhost:7000/recomandation-request?userId=${userId}`,
+        const response: any = await axios.get(
+          `http://localhost:7000/recomandation-request?userId=${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -70,10 +71,9 @@ const DocumentsPage = () => {
           }
         );
         setAllFiles(response.data || []);
-        console.log('all Requests:', response.data);
-
+        console.log("all Requests:", response.data);
       } catch (error) {
-        console.error('Error fetching all requests:', error);
+        console.error("Error fetching all requests:", error);
       }
     };
 
@@ -81,21 +81,39 @@ const DocumentsPage = () => {
   }, []);
 
   const folders = [
-    { name: 'Provisional Transcripts', files: 14, size: '200MB', icon: '📜', color: 'bg-blue-50 border-blue-200' },
-    { name: 'Recommendations', files: 1, size: '80KB', icon: '🏆', color: 'bg-green-50 border-green-200' },
-    { name: 'To Whom It May Concern', files: 7, size: '130MB', icon: '📋', color: 'bg-purple-50 border-purple-200' }
+    {
+      name: "Provisional Transcripts",
+      files: 14,
+      size: "200MB",
+      icon: "📜",
+      color: "bg-blue-50 border-blue-200",
+    },
+    {
+      name: "Recommendations",
+      files: 1,
+      size: "80KB",
+      icon: "🏆",
+      color: "bg-green-50 border-green-200",
+    },
+    {
+      name: "To Whom It May Concern",
+      files: 7,
+      size: "130MB",
+      icon: "📋",
+      color: "bg-purple-50 border-purple-200",
+    },
   ];
 
   const navItems = [
-    { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
-    { name: 'My Request', icon: FileText, path: '/my-request' },
-    { name: 'Archives', icon: Archive },
-    { name: 'Certificates', icon: GraduationCap }
+    { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+    { name: "My Request", icon: FileText, path: "/my-request" },
+    { name: "Archives", icon: Archive },
+    { name: "Certificates", icon: GraduationCap },
   ];
 
   const navigate = useNavigate();
 
-  const handleNavClick = (item: typeof navItems[number]) => {
+  const handleNavClick = (item: (typeof navItems)[number]) => {
     if (item.path) {
       navigate(item.path);
     }
@@ -103,154 +121,152 @@ const DocumentsPage = () => {
 
   const getStatusIcon = (status: string | undefined) => {
     switch (status) {
-      case 'pending':
+      case "pending":
         return <Clock className="w-4 h-4 text-yellow-500" />;
-      case 'approved':
-      case 'recoveryApproved':
-      case 'libraryApproved':
-      case 'staffApproved':
-      case 'deanApproved':
-      case 'registrationApproved':
-      case 'chancellorApproved':
+      case "approved":
+      case "recoveryApproved":
+      case "libraryApproved":
+      case "staffApproved":
+      case "deanApproved":
+      case "registrationApproved":
+      case "chancellorApproved":
         return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'rejected':
-      case 'recoveryRejected':
-      case 'libraryRejected':
-      case 'staffRejected':
-      case 'deanRejected':
-      case 'registrationRejected':
-      case 'chancellorRejected':
+      case "rejected":
+      case "recoveryRejected":
+      case "libraryRejected":
+      case "staffRejected":
+      case "deanRejected":
+      case "registrationRejected":
+      case "chancellorRejected":
         return <XCircle className="w-4 h-4 text-red-500" />;
-      case 'completed':
+      case "completed":
         return <CheckCircle className="w-4 h-4 text-blue-500" />;
       default:
         return <AlertCircle className="w-4 h-4 text-gray-400" />;
     }
   };
 
-
   const getStatusStyle = (status: string | undefined) => {
     switch (status) {
-      case 'pending':
-        return 'bg-yellow-50 text-yellow-700 border-yellow-200';
+      case "pending":
+        return "bg-yellow-50 text-yellow-700 border-yellow-200";
 
-      case 'approved':
-      case 'recoveryApproved':
-      case 'libraryApproved':
-      case 'staffApproved':
-      case 'deanApproved':
-      case 'registrationApproved':
-      case 'chancellorApproved':
-        return 'bg-green-50 text-green-700 border-green-200';
+      case "approved":
+      case "recoveryApproved":
+      case "libraryApproved":
+      case "staffApproved":
+      case "deanApproved":
+      case "registrationApproved":
+      case "chancellorApproved":
+        return "bg-green-50 text-green-700 border-green-200";
 
-      case 'rejected':
-      case 'recoveryRejected':
-      case 'libraryRejected':
-      case 'staffRejected':
-      case 'deanRejected':
-      case 'registrationRejected':
-      case 'chancellorRejected':
-        return 'bg-red-50 text-red-700 border-red-200';
+      case "rejected":
+      case "recoveryRejected":
+      case "libraryRejected":
+      case "staffRejected":
+      case "deanRejected":
+      case "registrationRejected":
+      case "chancellorRejected":
+        return "bg-red-50 text-red-700 border-red-200";
 
-      case 'completed':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+      case "completed":
+        return "bg-blue-50 text-blue-700 border-blue-200";
 
       default:
-        return 'bg-gray-50 text-gray-700 border-gray-200';
+        return "bg-gray-50 text-gray-700 border-gray-200";
     }
   };
 
-
   const approvedStatuses = [
-  'approved',
-  'recoveryApproved',
-  'libraryApproved',
-  'staffApproved',
-  'deanApproved',
-  'registrationApproved',
-  'chancellorApproved',
-];
+    "approved",
+    "recoveryApproved",
+    "libraryApproved",
+    "staffApproved",
+    "deanApproved",
+    "registrationApproved",
+    "chancellorApproved",
+  ];
 
-const rejectedStatuses = [
-  'rejected',
-  'recoveryRejected',
-  'libraryRejected',
-  'staffRejected',
-  'deanRejected',
-  'registrationRejected',
-  'chancellorRejected',
-];
+  const rejectedStatuses = [
+    "rejected",
+    "recoveryRejected",
+    "libraryRejected",
+    "staffRejected",
+    "deanRejected",
+    "registrationRejected",
+    "chancellorRejected",
+  ];
 
-const filteredFiles = allFiles.filter(file => {
-  const matchesSearch =
-    file.regnumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (file.description || file.reason)?.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredFiles = allFiles.filter((file) => {
+    const matchesSearch =
+      file.regnumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (file.description || file.reason)
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
-  let matchesStatus = true;
+    let matchesStatus = true;
 
-  if (selectedStatus !== 'all') {
-    const status:any = file.status;
+    if (selectedStatus !== "all") {
+      const status: any = file.status;
 
-    if (selectedStatus === 'approved') {
-      matchesStatus = approvedStatuses.includes(status);
-    } else if (selectedStatus === 'rejected') {
-      matchesStatus = rejectedStatuses.includes(status);
-    } else {
-      matchesStatus = status?.toLowerCase() === selectedStatus.toLowerCase();
+      if (selectedStatus === "approved") {
+        matchesStatus = approvedStatuses.includes(status);
+      } else if (selectedStatus === "rejected") {
+        matchesStatus = rejectedStatuses.includes(status);
+      } else {
+        matchesStatus = status?.toLowerCase() === selectedStatus.toLowerCase();
+      }
     }
-  }
 
-  return matchesSearch && matchesStatus;
-});
-
+    return matchesSearch && matchesStatus;
+  });
 
   const stats = [
     {
-      label: 'Total Requests',
+      label: "Total Requests",
       value: allFiles.length,
       icon: FileText,
-      color: 'text-blue-600',
+      color: "text-blue-600",
     },
     {
-      label: 'Approved',
-      value: allFiles.filter((f:any) =>
+      label: "Approved",
+      value: allFiles.filter((f: any) =>
         [
-          'approved',
-          'recoveryApproved',
-          'libraryApproved',
-          'staffApproved',
-          'deanApproved',
-          'registrationApproved',
-          'chancellorApproved'
+          "approved",
+          "recoveryApproved",
+          "libraryApproved",
+          "staffApproved",
+          "deanApproved",
+          "registrationApproved",
+          "chancellorApproved",
         ].includes(f.status)
       ).length,
       icon: CheckCircle,
-      color: 'text-green-600',
+      color: "text-green-600",
     },
     {
-      label: 'Pending',
-      value: allFiles.filter(f => f.status === 'pending').length,
+      label: "Pending",
+      value: allFiles.filter((f) => f.status === "pending").length,
       icon: Clock,
-      color: 'text-yellow-600',
+      color: "text-yellow-600",
     },
     {
-      label: 'Rejected',
-      value: allFiles.filter((f:any) =>
+      label: "Rejected",
+      value: allFiles.filter((f: any) =>
         [
-          'rejected',
-          'recoveryRejected',
-          'libraryRejected',
-          'staffRejected',
-          'deanRejected',
-          'registrationRejected',
-          'chancellorRejected'
+          "rejected",
+          "recoveryRejected",
+          "libraryRejected",
+          "staffRejected",
+          "deanRejected",
+          "registrationRejected",
+          "chancellorRejected",
         ].includes(f.status)
       ).length,
       icon: XCircle,
-      color: 'text-red-600',
+      color: "text-red-600",
     },
   ];
-
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -263,9 +279,11 @@ const filteredFiles = allFiles.filter(file => {
       )}
 
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } fixed lg:static lg:translate-x-0 z-50 w-64 h-full bg-white shadow-xl border-r border-gray-200 transition-transform duration-300 ease-in-out flex flex-col`}>
-
+      <div
+        className={`${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } fixed lg:static lg:translate-x-0 z-50 w-64 h-full bg-white shadow-xl border-r border-gray-200 transition-transform duration-300 ease-in-out flex flex-col`}
+      >
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
@@ -291,10 +309,11 @@ const filteredFiles = allFiles.filter(file => {
             {navItems.map((item, index) => (
               <button
                 key={index}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${item.path === window.location.pathname
-                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
+                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  item.path === window.location.pathname
+                    ? "bg-blue-50 text-blue-700 border border-blue-200"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
                 onClick={() => handleNavClick(item)}
               >
                 <item.icon className="w-5 h-5" />
@@ -325,8 +344,12 @@ const filteredFiles = allFiles.filter(file => {
                 <Menu className="w-5 h-5" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Document Requests</h1>
-                <p className="text-sm text-gray-500">Manage your academic documents</p>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Document Requests
+                </h1>
+                <p className="text-sm text-gray-500">
+                  Manage your academic documents
+                </p>
               </div>
             </div>
 
@@ -345,11 +368,18 @@ const filteredFiles = allFiles.filter(file => {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {stats.map((stat, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+              <div
+                key={index}
+                className="bg-white rounded-xl p-6 shadow-sm border border-gray-200"
+              >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
+                    <p className="text-sm font-medium text-gray-600">
+                      {stat.label}
+                    </p>
+                    <p className="text-3xl font-bold text-gray-900 mt-2">
+                      {stat.value}
+                    </p>
                   </div>
                   <div className={`p-3 rounded-lg bg-gray-50 ${stat.color}`}>
                     <stat.icon className="w-6 h-6" />
@@ -401,7 +431,9 @@ const filteredFiles = allFiles.filter(file => {
 
           {/* Folders Section */}
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Folders</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Folders
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {folders.map((folder, index) => (
                 <div
@@ -412,9 +444,12 @@ const filteredFiles = allFiles.filter(file => {
                     <span className="text-2xl">{folder.icon}</span>
                     <FolderOpen className="w-5 h-5 text-gray-400" />
                   </div>
-                  <h3 className="font-medium text-gray-900 mb-2">{folder.name}</h3>
+                  <h3 className="font-medium text-gray-900 mb-2">
+                    {folder.name}
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    {folder.files} {folder.files === 1 ? 'File' : 'Files'} • {folder.size}
+                    {folder.files} {folder.files === 1 ? "File" : "Files"} •{" "}
+                    {folder.size}
                   </p>
                 </div>
               ))}
@@ -424,23 +459,39 @@ const filteredFiles = allFiles.filter(file => {
           {/* Requests Table */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">All Requests</h2>
+              <h2 className="text-lg font-semibold text-gray-900">
+                All Requests
+              </h2>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Student Name</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Doc Type</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Faculty</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Department</th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">
+                      Student Name
+                    </th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">
+                      Doc Type
+                    </th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">
+                      Faculty
+                    </th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">
+                      Department
+                    </th>
                     {/* <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Program</th> */}
                     {/* <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Level</th> */}
                     {/* <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Phone</th> */}
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Reason</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Status</th>
-                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">Actions</th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">
+                      Reason
+                    </th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">
+                      Status
+                    </th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-700">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
 
@@ -448,20 +499,34 @@ const filteredFiles = allFiles.filter(file => {
                   {allFiles.map((file) => (
                     <tr key={file.id} className="hover:bg-gray-50">
                       {/* <td className="py-4 px-6 text-gray-900">{file.regNumber}</td> */}
-                      <td className="py-4 px-6 text-gray-700">{file.user?.firstName} {file.user?.lastName}</td>
-                      <td className="py-4 px-6 text-gray-700">{file.documentType}</td>
+                      <td className="py-4 px-6 text-gray-700">
+                        {file.user?.firstName} {file.user?.lastName}
+                      </td>
+                      <td className="py-4 px-6 text-gray-700">
+                        {file.documentType}
+                      </td>
 
-                      <td className="py-4 px-6 text-gray-700">{file.facultyId?.name}</td>
-                      <td className="py-4 px-6 text-gray-700">{file.departmentId?.name}</td>
+                      <td className="py-4 px-6 text-gray-700">
+                        {file.facultyId?.name}
+                      </td>
+                      <td className="py-4 px-6 text-gray-700">
+                        {file.departmentId?.name}
+                      </td>
                       {/* <td className="py-4 px-6 text-gray-700">{file.program}</td> */}
                       {/* <td className="py-4 px-6 text-gray-700">{file.level}</td> */}
                       {/* <td className="py-4 px-6 text-gray-700">{file.phoneNumber}</td> */}
-                      <td className="py-4 px-6 text-gray-700">{file.reason || '—'}</td>
+                      <td className="py-4 px-6 text-gray-700">
+                        {file.reason || "—"}
+                      </td>
 
                       <td className="py-4 px-6">
                         <div className="flex items-center space-x-2">
                           {getStatusIcon(file.status)}
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusStyle(file.status)}`}>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusStyle(
+                              file.status
+                            )}`}
+                          >
                             {file.status}
                           </span>
                         </div>
@@ -484,7 +549,6 @@ const filteredFiles = allFiles.filter(file => {
                     </tr>
                   ))}
                 </tbody>
-
               </table>
 
               {allFiles.length === 0 && (
@@ -505,37 +569,39 @@ const filteredFiles = allFiles.filter(file => {
             setIsModalVisible3(false);
           }}
         >
-          <StudentForms onSuccess={() => {
-            setIsModalVisible3(false);
-            // Refetch data after successful request
-            const fetchTranscriptRequests = async () => {
-              try {
-                const token = localStorage.getItem('authToken');
-                if (!token) return;
+          <StudentForms
+            onSuccess={() => {
+              setIsModalVisible3(false);
+              // Refetch data after successful request
+              const fetchTranscriptRequests = async () => {
+                try {
+                  const token = localStorage.getItem("authToken");
+                  if (!token) return;
 
-                interface MyJwtPayload {
-                  id?: string;
-                  [key: string]: any;
-                }
-                const decoded = jwtDecode<MyJwtPayload>(token);
-                const userId = decoded?.id;
-                if (!userId) return;
-
-                const response: any = await axios.get(`http://localhost:7000/transcript-request/transcript?requestedbyId=${userId}`,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
+                  interface MyJwtPayload {
+                    id?: string;
+                    [key: string]: any;
                   }
-                );
-                setAllFiles(response.data || []);
+                  const decoded = jwtDecode<MyJwtPayload>(token);
+                  const userId = decoded?.id;
+                  if (!userId) return;
 
-              } catch (error) {
-                console.error('Error fetching transcript requests:', error);
-              }
-            };
-            fetchTranscriptRequests();
-          }} />
+                  const response: any = await axios.get(
+                    `http://localhost:7000/transcript-request/transcript?requestedbyId=${userId}`,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
+                  setAllFiles(response.data || []);
+                } catch (error) {
+                  console.error("Error fetching transcript requests:", error);
+                }
+              };
+              fetchTranscriptRequests();
+            }}
+          />
         </Modal>
       )}
     </div>
